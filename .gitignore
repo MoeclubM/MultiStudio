@@ -1,0 +1,33 @@
+# Rust
+/target
+**/*.rs.bk
+Cargo.lock
+
+# Node
+node_modules
+dist
+.cache
+
+# Tauri
+src-tauri/target
+src-tauri/Cargo.lock
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# App data
+.aerina-data
+.live-translator-data
