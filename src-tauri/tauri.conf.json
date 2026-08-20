@@ -5,7 +5,7 @@
   "identifier": "app.livetranslator.desktop",
   "build": {
     "beforeDevCommand": "npm run dev",
-    "devUrl": "http://127.0.0.1:1420",
+    "devUrl": "http://127.0.0.1:5173",
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
@@ -34,7 +34,10 @@
     "category": "Productivity",
     "shortDescription": "Realtime ASR + LLM translation — mic / system audio, OpenAI-compatible endpoints",
     "longDescription": "LiveTranslator captures microphone or system audio, streams it through an OpenAI-compatible ASR endpoint for transcription and an OpenAI-compatible LLM for translation, with selectable source/target languages and low-latency streaming subtitles.",
-    "icon": ["icons/icon.png", "icons/icon.ico"]
+    "icon": [
+      "icons/icon.png",
+      "icons/icon.ico"
+    ]
   },
   "plugins": {
     "opener": {}
