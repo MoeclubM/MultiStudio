@@ -4,6 +4,7 @@ use serde::Deserialize;
 
 use super::{auth, base_trimmed, validate_base_url};
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Deserialize)]
 pub struct TranscriptionSegment {
     pub start: f64,
@@ -11,6 +12,7 @@ pub struct TranscriptionSegment {
     pub text: String,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Deserialize)]
 struct VerboseTranscription {
     text: String,
@@ -22,6 +24,7 @@ struct VerboseTranscription {
     duration: Option<f64>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct AsrResult {
     pub text: String,

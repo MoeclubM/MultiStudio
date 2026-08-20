@@ -1,7 +1,7 @@
 mod asr;
 mod llm;
 
-pub use asr::{AsrClient, AsrResult, TranscriptionSegment};
+pub use asr::AsrClient;
 pub use llm::{LlmClient, LlmStreamEvent, TranslateRequest};
 
 use anyhow::Result;

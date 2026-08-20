@@ -1,4 +1,6 @@
 import { useSessionStore } from "@/stores/session";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export function SubtitleBar() {
   const { transcripts, translations } = useSessionStore();
@@ -7,27 +9,39 @@ export function SubtitleBar() {
 
   if (!last) {
     return (
-      <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/50 p-8 text-center text-sm text-zinc-500">
-        开始录制后，原文与译文将实时显示在这里
-      </div>
+      <Card className="border-dashed bg-muted/30">
+        <CardContent className="p-8 text-center text-sm text-muted-foreground">
+          开始录制后，原文与译文将实时显示在这里
+        </CardContent>
+      </Card>
     );
   }
 
   return (
     <div className="space-y-3">
-      <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5 shadow-lg">
-        <div className="mb-1 text-xs font-medium tracking-wide text-zinc-500">原文 · {last.lang ?? "auto"}</div>
-        <div className="text-lg leading-relaxed text-zinc-100">{last.text}</div>
-      </div>
-      <div className="rounded-2xl border border-brand/30 bg-gradient-to-br from-brand/10 to-zinc-900 p-5 shadow-lg">
-        <div className="mb-1 flex items-center gap-2 text-xs font-medium tracking-wide text-zinc-400">
-          译文 {trans?.isStreaming ? <span className="inline-flex items-center gap-1"><span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />翻译中</span> : null}
-          {trans?.latencyMs ? <span className="text-zinc-600">{trans.latencyMs}ms</span> : null}
-        </div>
-        <div className="text-xl font-medium leading-relaxed text-white">
-          {trans?.translatedText || <span className="text-zinc-600">等待翻译…</span>}
-        </div>
-      </div>
+      <Card className="shadow-sm">
+        <CardContent className="p-5">
+          <div className="mb-1 text-xs font-medium tracking-wide text-muted-foreground">原文 · {last.lang ?? "auto"}</div>
+          <div className="text-lg leading-relaxed">{last.text}</div>
+        </CardContent>
+      </Card>
+      <Card className="border-primary/30 bg-gradient-to-br from-primary/10 to-card shadow-sm">
+        <CardContent className="p-5">
+          <div className="mb-1 flex items-center gap-2 text-xs font-medium tracking-wide text-muted-foreground">
+            译文{" "}
+            {trans?.isStreaming ? (
+              <Badge variant="secondary" className="gap-1">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+                翻译中
+              </Badge>
+            ) : null}
+            {trans?.latencyMs ? <span className="text-muted-foreground/60">{trans.latencyMs}ms</span> : null}
+          </div>
+          <div className="text-xl font-medium leading-relaxed">
+            {trans?.translatedText || <span className="text-muted-foreground">等待翻译…</span>}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

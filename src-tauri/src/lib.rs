@@ -1,8 +1,6 @@
 use std::path::PathBuf;
-use std::sync::Arc;
 
 use tauri::{AppHandle, Emitter, Manager, State};
-use tokio::sync::Mutex;
 
 mod audio;
 mod config;
@@ -12,7 +10,7 @@ mod vad;
 
 use audio::AudioDeviceInfo;
 use config::AppConfig;
-use pipeline::{new_shared, PipelineInner, SharedPipeline};
+use pipeline::{new_shared, SharedPipeline};
 
 #[derive(Debug, serde::Serialize)]
 struct CommandError {

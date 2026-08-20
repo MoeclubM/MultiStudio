@@ -88,6 +88,7 @@ pub struct AppConfig {
     pub translation: TranslationConfig,
 }
 
+#[allow(dead_code)]
 impl AppConfig {
     pub fn asr_base(&self) -> String {
         self.asr.base_url.trim_end_matches('/').to_string()

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useSessionStore } from "@/stores/session";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function HistoryPage() {
   const { history, setHistory } = useSessionStore();
@@ -41,27 +44,31 @@ export default function HistoryPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-semibold">历史</h1>
         <div className="flex gap-2">
-          <button onClick={handleExport} className="rounded-full border border-zinc-700 px-4 py-1.5 text-sm hover:bg-zinc-800">导出 JSON</button>
-          <button onClick={handleClear} className="rounded-full bg-zinc-800 px-4 py-1.5 text-sm hover:bg-zinc-700">清空</button>
+          <Button variant="outline" size="sm" onClick={handleExport}>导出 JSON</Button>
+          <Button variant="secondary" size="sm" onClick={handleClear}>清空</Button>
         </div>
       </div>
       {!loaded ? (
-        <div className="py-12 text-center text-sm text-zinc-500">加载中…</div>
+        <div className="py-12 text-center text-sm text-muted-foreground">加载中…</div>
       ) : history.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/50 p-12 text-center text-sm text-zinc-500">暂无历史，实时翻译的会话会被记录在这里</div>
+        <Card className="border-dashed bg-muted/30">
+          <CardContent className="p-12 text-center text-sm text-muted-foreground">暂无历史，实时翻译的会话会被记录在这里</CardContent>
+        </Card>
       ) : (
         <div className="space-y-3">
           {history.map((h) => (
-            <div key={h.id} className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
-              <div className="mb-2 flex items-center justify-between text-xs text-zinc-500">
-                <span>{new Date(h.startedAt).toLocaleString()} · {h.sourceLang} → {h.targetLang}</span>
-                <span>{h.durationMs}ms</span>
-              </div>
-              <div className="grid gap-3 md:grid-cols-2">
-                <div className="rounded-xl bg-zinc-950 p-3 text-sm leading-relaxed">{h.transcript || "—"}</div>
-                <div className="rounded-xl bg-brand/10 p-3 text-sm leading-relaxed text-zinc-100">{h.translation || "—"}</div>
-              </div>
-            </div>
+            <Card key={h.id}>
+              <CardContent className="p-4">
+                <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{new Date(h.startedAt).toLocaleString()} · {h.sourceLang} → {h.targetLang}</span>
+                  <Badge variant="outline">{h.durationMs}ms</Badge>
+                </div>
+                <div className="grid gap-3 md:grid-cols-2">
+                  <div className="rounded-lg bg-muted p-3 text-sm leading-relaxed">{h.transcript || "—"}</div>
+                  <div className="rounded-lg bg-primary/10 p-3 text-sm leading-relaxed">{h.translation || "—"}</div>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       )}

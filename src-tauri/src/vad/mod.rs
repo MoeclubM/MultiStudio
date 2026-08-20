@@ -30,6 +30,7 @@ pub enum SegmentReason {
     Flush,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Segment {
     pub samples: Vec<i16>,
@@ -45,6 +46,7 @@ pub struct VadSegmenter {
     energy_threshold: f32,
 }
 
+#[allow(dead_code)]
 impl VadSegmenter {
     pub fn new(cfg: VadConfig) -> Self {
         let silence_samples = (cfg.sample_rate as usize * cfg.silence_ms as usize) / 1000;

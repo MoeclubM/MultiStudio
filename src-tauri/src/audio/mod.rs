@@ -8,6 +8,7 @@ pub struct AudioDeviceInfo {
     pub is_default: bool,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub enum AudioSourceKind {
     Microphone,
@@ -15,6 +16,7 @@ pub enum AudioSourceKind {
     Combined,
 }
 
+#[allow(dead_code)]
 impl AudioSourceKind {
     pub fn from_str(s: &str) -> Self {
         match s {
@@ -95,6 +97,7 @@ pub fn list_devices() -> anyhow::Result<Vec<AudioDeviceInfo>> {
     }])
 }
 
+#[allow(dead_code)]
 pub fn normalize_samples_i16(samples: &[f32]) -> Vec<i16> {
     samples
         .iter()
