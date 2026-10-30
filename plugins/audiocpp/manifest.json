@@ -1,0 +1,1243 @@
+{
+  "apiVersion": 1,
+  "id": "multistudio.audiocpp",
+  "name": "audio.cpp",
+  "version": "1.1.0",
+  "entry": "index.cjs",
+  "backends": {
+    "audiocpp": {
+      "name": "audio.cpp",
+      "capabilities": [
+        "asr",
+        "tts",
+        "streaming"
+      ],
+      "modelImports": [
+        {
+          "engine": "confucius4_r2t2",
+          "name": "R2T2 识别",
+          "task": "asr",
+          "format": "gguf"
+        },
+        {
+          "engine": "qwen3_asr",
+          "name": "Qwen3 ASR",
+          "task": "asr",
+          "format": "gguf"
+        },
+        {
+          "engine": "nemotron_asr",
+          "name": "NeMo 识别",
+          "task": "asr",
+          "format": "gguf"
+        },
+        {
+          "engine": "fun_asr_nano",
+          "name": "FunASR",
+          "task": "asr",
+          "format": "gguf"
+        },
+        {
+          "engine": "sense_asr",
+          "name": "SenseVoice",
+          "task": "asr",
+          "format": "gguf"
+        },
+        {
+          "engine": "index_tts2",
+          "name": "IndexTTS",
+          "task": "tts",
+          "format": "gguf"
+        },
+        {
+          "engine": "qwen3_tts",
+          "name": "Qwen3 TTS",
+          "task": "tts",
+          "format": "gguf"
+        },
+        {
+          "engine": "cosyvoice3",
+          "name": "CosyVoice",
+          "task": "tts",
+          "format": "gguf"
+        },
+        {
+          "engine": "fish_drama3",
+          "name": "Fish Audio",
+          "task": "tts",
+          "format": "gguf"
+        },
+        {
+          "engine": "breeze_tts",
+          "name": "Breeze TTS",
+          "task": "tts",
+          "format": "gguf"
+        }
+      ]
+    }
+  },
+  "nodes": {
+    "audiocpp.asr": {
+      "label": "R2T2 识别",
+      "group": "model",
+      "input": "audio",
+      "output": "text",
+      "icon": "mic",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "confucius4_r2t2"
+        },
+        {
+          "key": "language",
+          "label": "语言",
+          "type": "text",
+          "placeholder": "自动检测"
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp"
+    },
+    "audiocpp.qwen3-asr": {
+      "label": "Qwen3 ASR",
+      "group": "model",
+      "input": "audio",
+      "output": "text",
+      "icon": "mic",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "qwen3_asr"
+        },
+        {
+          "key": "language",
+          "label": "语言",
+          "type": "text",
+          "placeholder": "自动检测"
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp"
+    },
+    "audiocpp.nemo-asr": {
+      "label": "NeMo 识别",
+      "group": "model",
+      "input": "audio",
+      "output": "text",
+      "icon": "mic",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "nemotron_asr"
+        },
+        {
+          "key": "language",
+          "label": "语言",
+          "type": "text",
+          "placeholder": "自动检测"
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp"
+    },
+    "audiocpp.funasr": {
+      "label": "FunASR",
+      "group": "model",
+      "input": "audio",
+      "output": "text",
+      "icon": "mic",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "fun_asr_nano"
+        },
+        {
+          "key": "language",
+          "label": "语言",
+          "type": "text",
+          "placeholder": "自动检测"
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp"
+    },
+    "audiocpp.sensevoice": {
+      "label": "SenseVoice",
+      "group": "model",
+      "input": "audio",
+      "output": "text",
+      "icon": "mic",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "sense_asr"
+        },
+        {
+          "key": "language",
+          "label": "语言",
+          "type": "text",
+          "placeholder": "自动检测"
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp"
+    },
+    "audiocpp.indextts": {
+      "label": "IndexTTS",
+      "group": "model",
+      "input": "text",
+      "output": "audio",
+      "icon": "volume",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "referenceAudioId": "",
+        "referenceFilename": "",
+        "referenceDuration": 0,
+        "referenceText": "",
+        "maxTokens": 256,
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "index_tts2"
+        },
+        {
+          "key": "referenceText",
+          "label": "参考音频文字",
+          "type": "textarea",
+          "rows": 2,
+          "maxLength": 8192
+        },
+        {
+          "key": "language",
+          "label": "语言",
+          "type": "text",
+          "placeholder": "自动检测"
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "maxTokens",
+          "label": "生成长度",
+          "type": "number",
+          "min": 16,
+          "max": 8192,
+          "step": 16,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp",
+      "widget": "audio-reference"
+    },
+    "audiocpp.qwen3-tts": {
+      "label": "Qwen3 TTS",
+      "group": "model",
+      "input": "text",
+      "output": "audio",
+      "icon": "volume",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "referenceAudioId": "",
+        "referenceFilename": "",
+        "referenceDuration": 0,
+        "referenceText": "",
+        "maxTokens": 256,
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "qwen3_tts"
+        },
+        {
+          "key": "referenceText",
+          "label": "参考音频文字",
+          "type": "textarea",
+          "rows": 2,
+          "maxLength": 8192
+        },
+        {
+          "key": "language",
+          "label": "语言",
+          "type": "text",
+          "placeholder": "自动检测"
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "maxTokens",
+          "label": "生成长度",
+          "type": "number",
+          "min": 16,
+          "max": 8192,
+          "step": 16,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp",
+      "widget": "audio-reference"
+    },
+    "audiocpp.cosyvoice": {
+      "label": "CosyVoice",
+      "group": "model",
+      "input": "text",
+      "output": "audio",
+      "icon": "volume",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "referenceAudioId": "",
+        "referenceFilename": "",
+        "referenceDuration": 0,
+        "referenceText": "",
+        "maxTokens": 256,
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "cosyvoice3"
+        },
+        {
+          "key": "referenceText",
+          "label": "参考音频文字",
+          "type": "textarea",
+          "rows": 2,
+          "maxLength": 8192
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "maxTokens",
+          "label": "生成长度",
+          "type": "number",
+          "min": 16,
+          "max": 8192,
+          "step": 16,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp",
+      "widget": "audio-reference"
+    },
+    "audiocpp.fish": {
+      "label": "Fish Audio",
+      "group": "model",
+      "input": "text",
+      "output": "audio",
+      "icon": "volume",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "referenceAudioId": "",
+        "referenceFilename": "",
+        "referenceDuration": 0,
+        "referenceText": "",
+        "maxTokens": 256,
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "fish_drama3"
+        },
+        {
+          "key": "referenceText",
+          "label": "参考音频文字",
+          "type": "textarea",
+          "rows": 2,
+          "maxLength": 8192
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "maxTokens",
+          "label": "生成长度",
+          "type": "number",
+          "min": 16,
+          "max": 8192,
+          "step": 16,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp",
+      "widget": "audio-reference"
+    },
+    "audiocpp.breeze": {
+      "label": "Breeze TTS",
+      "group": "model",
+      "input": "text",
+      "output": "audio",
+      "icon": "volume",
+      "defaults": {
+        "modelPath": "",
+        "language": "",
+        "threads": 4,
+        "sessionOptions": "{}",
+        "requestOptions": "{}",
+        "referenceAudioId": "",
+        "referenceFilename": "",
+        "referenceDuration": 0,
+        "referenceText": "",
+        "maxTokens": 256,
+        "device": "auto"
+      },
+      "fields": [
+        {
+          "key": "modelPath",
+          "label": "模型",
+          "type": "model",
+          "resource": "speech",
+          "byPath": true,
+          "backend": "audiocpp",
+          "family": "breeze_tts"
+        },
+        {
+          "key": "referenceText",
+          "label": "参考音频文字",
+          "type": "textarea",
+          "rows": 2,
+          "maxLength": 8192
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1,
+          "advanced": true
+        },
+        {
+          "key": "device",
+          "label": "运行设备",
+          "type": "select",
+          "options": [
+            {
+              "value": "auto",
+              "label": "自动"
+            },
+            {
+              "value": "cpu",
+              "label": "CPU"
+            }
+          ],
+          "platformOptions": {
+            "win32": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "vulkan",
+                "label": "Vulkan（含 AMD）"
+              },
+              {
+                "value": "cuda",
+                "label": "NVIDIA CUDA"
+              }
+            ],
+            "darwin": [
+              {
+                "value": "auto",
+                "label": "自动"
+              },
+              {
+                "value": "cpu",
+                "label": "CPU"
+              },
+              {
+                "value": "metal",
+                "label": "Apple Metal"
+              }
+            ]
+          }
+        },
+        {
+          "key": "sessionOptions",
+          "label": "引擎参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "requestOptions",
+          "label": "生成参数",
+          "type": "textarea",
+          "rows": 3,
+          "maxLength": 8192,
+          "advanced": true
+        },
+        {
+          "key": "maxTokens",
+          "label": "生成长度",
+          "type": "number",
+          "min": 16,
+          "max": 8192,
+          "step": 16,
+          "advanced": true
+        }
+      ],
+      "backend": "audiocpp",
+      "widget": "audio-reference"
+    }
+  }
+}

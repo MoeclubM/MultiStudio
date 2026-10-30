@@ -1,0 +1,288 @@
+{
+  "apiVersion": 1,
+  "id": "multistudio.outputs",
+  "name": "输出",
+  "version": "1.0.0",
+  "entry": "index.cjs",
+  "nodes": {
+    "text-output": {
+      "label": "文本输出",
+      "group": "output",
+      "input": "text",
+      "output": null,
+      "icon": "text",
+      "defaults": {},
+      "fields": []
+    },
+    "desktop-output": {
+      "label": "桌面输出",
+      "group": "output",
+      "input": "text",
+      "output": null,
+      "icon": "monitor",
+      "defaults": {
+        "mode": "window",
+        "title": "输出",
+        "alwaysOnTop": true
+      },
+      "fields": [
+        {
+          "key": "mode",
+          "label": "显示方式",
+          "type": "select",
+          "options": [
+            {
+              "value": "window",
+              "label": "桌面窗口"
+            },
+            {
+              "value": "notification",
+              "label": "系统通知"
+            }
+          ]
+        },
+        {
+          "key": "title",
+          "label": "标题",
+          "type": "text"
+        },
+        {
+          "key": "alwaysOnTop",
+          "label": "置顶",
+          "type": "boolean",
+          "when": {
+            "mode": [
+              "overlay",
+              "window"
+            ]
+          }
+        }
+      ]
+    },
+    "audio-output": {
+      "label": "音频输出",
+      "group": "output",
+      "input": "audio",
+      "output": null,
+      "icon": "audio",
+      "defaults": {
+        "autoplay": false
+      },
+      "fields": [
+        {
+          "key": "autoplay",
+          "label": "自动播放",
+          "type": "boolean"
+        }
+      ]
+    },
+    "subtitle-output": {
+      "label": "原文字幕",
+      "group": "output",
+      "input": "text",
+      "output": null,
+      "icon": "monitor",
+      "defaults": {
+        "fontSize": 26,
+        "color": "#ffffff",
+        "background": "#0f1117",
+        "opacity": 0.75,
+        "fontFamily": "",
+        "lines": 2,
+        "width": 1000,
+        "offsetY": 180,
+        "align": "center",
+        "alwaysOnTop": true
+      },
+      "fields": [
+        {
+          "key": "fontSize",
+          "label": "字号",
+          "type": "number",
+          "min": 12,
+          "max": 72
+        },
+        {
+          "key": "color",
+          "label": "文字颜色",
+          "type": "color"
+        },
+        {
+          "key": "opacity",
+          "label": "背景不透明度",
+          "type": "number",
+          "min": 0,
+          "max": 1,
+          "step": 0.05
+        },
+        {
+          "key": "background",
+          "label": "背景颜色",
+          "type": "color",
+          "advanced": true
+        },
+        {
+          "key": "fontFamily",
+          "label": "字体",
+          "type": "text",
+          "advanced": true
+        },
+        {
+          "key": "lines",
+          "label": "显示行数",
+          "type": "number",
+          "min": 1,
+          "max": 8,
+          "advanced": true
+        },
+        {
+          "key": "width",
+          "label": "宽度",
+          "type": "number",
+          "min": 320,
+          "max": 2560,
+          "step": 20,
+          "advanced": true
+        },
+        {
+          "key": "offsetY",
+          "label": "距屏幕底部",
+          "type": "number",
+          "min": 0,
+          "max": 1800,
+          "advanced": true
+        },
+        {
+          "key": "align",
+          "label": "对齐",
+          "type": "select",
+          "options": [
+            {
+              "value": "left",
+              "label": "左"
+            },
+            {
+              "value": "center",
+              "label": "居中"
+            },
+            {
+              "value": "right",
+              "label": "右"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "key": "alwaysOnTop",
+          "label": "置顶",
+          "type": "boolean",
+          "advanced": true
+        }
+      ]
+    },
+    "translated-subtitle-output": {
+      "label": "翻译字幕",
+      "group": "output",
+      "input": "text",
+      "output": null,
+      "icon": "monitor",
+      "defaults": {
+        "fontSize": 26,
+        "color": "#a7d8ff",
+        "background": "#0f1117",
+        "opacity": 0.75,
+        "fontFamily": "",
+        "lines": 2,
+        "width": 1000,
+        "offsetY": 40,
+        "align": "center",
+        "alwaysOnTop": true
+      },
+      "fields": [
+        {
+          "key": "fontSize",
+          "label": "字号",
+          "type": "number",
+          "min": 12,
+          "max": 72
+        },
+        {
+          "key": "color",
+          "label": "文字颜色",
+          "type": "color"
+        },
+        {
+          "key": "opacity",
+          "label": "背景不透明度",
+          "type": "number",
+          "min": 0,
+          "max": 1,
+          "step": 0.05
+        },
+        {
+          "key": "background",
+          "label": "背景颜色",
+          "type": "color",
+          "advanced": true
+        },
+        {
+          "key": "fontFamily",
+          "label": "字体",
+          "type": "text",
+          "advanced": true
+        },
+        {
+          "key": "lines",
+          "label": "显示行数",
+          "type": "number",
+          "min": 1,
+          "max": 8,
+          "advanced": true
+        },
+        {
+          "key": "width",
+          "label": "宽度",
+          "type": "number",
+          "min": 320,
+          "max": 2560,
+          "step": 20,
+          "advanced": true
+        },
+        {
+          "key": "offsetY",
+          "label": "距屏幕底部",
+          "type": "number",
+          "min": 0,
+          "max": 1800,
+          "advanced": true
+        },
+        {
+          "key": "align",
+          "label": "对齐",
+          "type": "select",
+          "options": [
+            {
+              "value": "left",
+              "label": "左"
+            },
+            {
+              "value": "center",
+              "label": "居中"
+            },
+            {
+              "value": "right",
+              "label": "右"
+            }
+          ],
+          "advanced": true
+        },
+        {
+          "key": "alwaysOnTop",
+          "label": "置顶",
+          "type": "boolean",
+          "advanced": true
+        }
+      ]
+    }
+  }
+}

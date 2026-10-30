@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 32 32" role="img" aria-labelledby="title">
+  <title id="title">MultiStudio</title>
+  <defs>
+    <linearGradient id="mark" x1="6" y1="8" x2="26" y2="24" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a9a1ff"/>
+      <stop offset=".55" stop-color="#8a7cf0"/>
+      <stop offset="1" stop-color="#67d7c4"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#1b1b29"/>
+  <rect x=".5" y=".5" width="31" height="31" rx="6.5" fill="none" stroke="#fff" stroke-opacity=".08"/>
+  <path d="M7 24V8l9 11L25 8v16" fill="none" stroke="url(#mark)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="url(#mark)">
+    <circle cx="7" cy="8" r="2"/>
+    <circle cx="16" cy="19" r="2"/>
+    <circle cx="25" cy="8" r="2"/>
+  </g>
+</svg>

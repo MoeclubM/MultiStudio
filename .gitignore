@@ -1,16 +1,17 @@
-# Rust
-/target
-**/*.rs.bk
-Cargo.lock
-
 # Node
 node_modules
 dist
+release
 .cache
+/.runtime/
+/native/bin/
+/native/obj/
 
-# Tauri
-src-tauri/target
-src-tauri/Cargo.lock
+# Local development artifacts
+/.playwright-cli/
+/output/playwright/
+.mimosa/
+.zcode/
 
 # IDE
 .vscode
@@ -31,3 +32,4 @@ npm-debug.log*
 # App data
 .aerina-data
 .live-translator-data
+.multistudio-data

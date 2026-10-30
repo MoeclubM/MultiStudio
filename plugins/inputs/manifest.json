@@ -1,0 +1,44 @@
+{
+  "apiVersion": 1,
+  "id": "multistudio.inputs",
+  "name": "输入",
+  "version": "1.0.0",
+  "entry": "index.cjs",
+  "nodes": {
+    "text-input": {
+      "label": "文本输入",
+      "apiInput": true,
+      "group": "input",
+      "input": null,
+      "output": "text",
+      "icon": "text",
+      "defaults": {
+        "text": ""
+      },
+      "fields": [
+        {
+          "key": "text",
+          "label": "文本",
+          "type": "textarea",
+          "rows": 5,
+          "maxLength": 32768
+        }
+      ]
+    },
+    "audio-input": {
+      "label": "音频文件",
+      "apiInput": true,
+      "group": "input",
+      "input": null,
+      "output": "audio",
+      "icon": "audio",
+      "defaults": {
+        "audioId": "",
+        "filename": "",
+        "duration": 0
+      },
+      "fields": [],
+      "widget": "audio-input"
+    }
+  }
+}

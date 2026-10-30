@@ -1,0 +1,156 @@
+name: Release Windows
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing version tag, for example v0.1.0'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    name: Desktop checks
+    uses: ./.github/workflows/desktop.yml
+
+  build:
+    needs: checks
+    name: Build Windows x64 (${{ matrix.profile }})
+    runs-on: windows-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [base, offline]
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+      MULTISTUDIO_PACKAGE_PROFILE: ${{ matrix.profile }}
+      CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
+      CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
+      MULTISTUDIO_REQUIRE_SIGNING: ${{ vars.WINDOWS_REQUIRE_SIGNING }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Validate release version
+        id: version
+        run: npm run release:version
+      - run: npm ci
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .runtime/audiocpp
+            .runtime/audiocpp-cuda
+            .runtime/llama
+            .cache/package-licenses
+          key: release-runtime-${{ runner.os }}-${{ runner.arch }}-${{ steps.version.outputs.runtimeKey }}-${{ matrix.profile }}
+      - run: npm run build
+      - run: npm run backend:release
+      - run: npm run test:unit
+      - run: npm run runtime:stage
+      - name: Build NSIS installer
+        run: npx --no-install electron-builder --config electron-builder.cjs --win nsis --x64 --publish never
+      - name: Verify packaged resources and installer
+        run: npm run release:verify -- --installer
+      - name: Check packaged desktop
+        env:
+          MULTISTUDIO_TEST_EXECUTABLE: ${{ github.workspace }}/release/win-unpacked/MultiStudio.exe
+        run: node --experimental-strip-types scripts/electron-smoke.ts
+      - name: Install without administrator access
+        id: install
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem -LiteralPath release -Filter '*-Setup.exe' | Select-Object -First 1
+          $installRoot = Join-Path $env:RUNNER_TEMP 'MultiStudio-installed'
+          $operation = Start-Process -FilePath $installer.FullName -ArgumentList @('/S', '/currentuser', "/D=$installRoot") -WindowStyle Hidden -Wait -PassThru
+          if ($operation.ExitCode -ne 0) { throw "Installer failed: $($operation.ExitCode)" }
+          if (!(Test-Path -LiteralPath (Join-Path $installRoot 'MultiStudio.exe'))) { throw 'Installed executable is missing' }
+          "MULTISTUDIO_INSTALLED_DIR=$installRoot" >> $env:GITHUB_ENV
+      - name: Check installed desktop
+        shell: pwsh
+        run: |
+          $env:MULTISTUDIO_TEST_EXECUTABLE = Join-Path $env:MULTISTUDIO_INSTALLED_DIR 'MultiStudio.exe'
+          node --experimental-strip-types scripts/electron-smoke.ts
+          if ($LASTEXITCODE -ne 0) { throw 'Installed desktop check failed' }
+      - name: Reinstall and retain user data
+        shell: pwsh
+        run: |
+          $dataRoot = Join-Path $env:APPDATA 'app.livetranslator.desktop'
+          New-Item -ItemType Directory -Path $dataRoot -Force | Out-Null
+          $marker = Join-Path $dataRoot 'release-check.txt'
+          Set-Content -LiteralPath $marker -Value 'retain user data'
+          $installer = Get-ChildItem -LiteralPath release -Filter '*-Setup.exe' | Select-Object -First 1
+          $operation = Start-Process -FilePath $installer.FullName -ArgumentList @('/S', '/currentuser') -WindowStyle Hidden -Wait -PassThru
+          if ($operation.ExitCode -ne 0) { throw "Reinstall failed: $($operation.ExitCode)" }
+          if (!(Test-Path -LiteralPath $marker)) { throw 'Reinstall removed user data' }
+      - name: Uninstall and retain user data
+        if: always() && steps.install.outcome == 'success'
+        shell: pwsh
+        run: |
+          $dataRoot = Join-Path $env:APPDATA 'app.livetranslator.desktop'
+          New-Item -ItemType Directory -Path $dataRoot -Force | Out-Null
+          $marker = Join-Path $dataRoot 'release-check.txt'
+          Set-Content -LiteralPath $marker -Value 'retain user data'
+          $uninstaller = Join-Path $env:MULTISTUDIO_INSTALLED_DIR 'Uninstall MultiStudio.exe'
+          $operation = Start-Process -FilePath $uninstaller -ArgumentList '/S' -WindowStyle Hidden -Wait -PassThru
+          if ($operation.ExitCode -ne 0) { throw "Uninstaller failed: $($operation.ExitCode)" }
+          $executable = Join-Path $env:MULTISTUDIO_INSTALLED_DIR 'MultiStudio.exe'
+          for ($attempt = 0; $attempt -lt 20 -and (Test-Path -LiteralPath $executable); $attempt++) { Start-Sleep -Seconds 1 }
+          if (Test-Path -LiteralPath $executable) { throw 'Uninstall did not remove the program' }
+          if (!(Test-Path -LiteralPath $marker)) { throw 'Uninstall removed user data' }
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: MultiStudio-windows-x64-${{ matrix.profile }}
+          path: release/*-Setup.exe
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+
+  publish:
+    name: Publish release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_TAG: ${{ needs.build.outputs.tag }}
+      PRERELEASE: ${{ needs.build.outputs.prerelease }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: MultiStudio-windows-x64-*
+          merge-multiple: true
+          path: artifacts
+      - name: Attach verified installer and publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$RELEASE_TAG" --json isDraft > release.json 2>/dev/null; then
+            test "$(jq -r .isDraft release.json)" = true || { echo 'This release is already public; use a new version tag.'; exit 1; }
+          else
+            gh release create "$RELEASE_TAG" --verify-tag --draft --title "MultiStudio $RELEASE_TAG" --generate-notes
+          fi
+          gh release upload "$RELEASE_TAG" artifacts/*-Setup.exe --clobber
+          gh release edit "$RELEASE_TAG" --draft=false --prerelease="$PRERELEASE"

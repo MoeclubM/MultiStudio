@@ -1,0 +1,46 @@
+{
+  "apiVersion": 1,
+  "id": "multistudio.text",
+  "name": "文本处理",
+  "version": "1.0.0",
+  "entry": "index.cjs",
+  "nodes": {
+    "sentence-split": {
+      "label": "流式分句",
+      "group": "model",
+      "input": "text",
+      "output": "text",
+      "icon": "text",
+      "defaults": {
+        "minChars": 16,
+        "maxChars": 80,
+        "maxWaitMs": 1800
+      },
+      "fields": [
+        {
+          "key": "minChars",
+          "label": "最短句段",
+          "type": "number",
+          "min": 1,
+          "max": 300
+        },
+        {
+          "key": "maxChars",
+          "label": "最长句段",
+          "type": "number",
+          "min": 8,
+          "max": 1000
+        },
+        {
+          "key": "maxWaitMs",
+          "label": "最长等待（毫秒）",
+          "type": "number",
+          "min": 200,
+          "max": 10000,
+          "step": 100
+        }
+      ]
+    }
+  },
+  "templates": []
+}

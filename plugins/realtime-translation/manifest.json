@@ -1,0 +1,115 @@
+{
+  "apiVersion": 1,
+  "id": "realtime-translation",
+  "name": "实时音频",
+  "version": "1.0.0",
+  "entry": "index.cjs",
+  "nodes": {
+    "live-audio-input": {
+      "label": "实时音频",
+      "group": "input",
+      "input": null,
+      "output": "audio",
+      "icon": "audio",
+      "defaults": {
+        "source": "microphone",
+        "deviceId": "",
+        "audioId": "",
+        "filename": "",
+        "duration": 0
+      },
+      "fields": [],
+      "widget": "audio-capture",
+      "session": true,
+      "platformDefaults": {
+        "win32": {
+          "source": "system"
+        }
+      }
+    }
+  },
+  "templates": [
+    {
+      "id": "live-subtitles",
+      "label": "实时字幕",
+      "nodes": [
+        {
+          "kind": "live-audio-input"
+        },
+        {
+          "kind": "audiocpp.nemo-asr"
+        },
+        {
+          "kind": "subtitle-output"
+        }
+      ]
+    },
+    {
+      "id": "realtime-translate",
+      "label": "实时翻译",
+      "nodes": [
+        {
+          "kind": "live-audio-input"
+        },
+        {
+          "kind": "audiocpp.nemo-asr"
+        },
+        {
+          "kind": "sentence-split"
+        },
+        {
+          "kind": "openai.translate"
+        },
+        {
+          "kind": "translated-subtitle-output"
+        }
+      ]
+    },
+    {
+      "id": "bilingual-subtitles",
+      "label": "双语字幕",
+      "nodes": [
+        {
+          "kind": "live-audio-input"
+        },
+        {
+          "kind": "audiocpp.nemo-asr"
+        },
+        {
+          "kind": "subtitle-output"
+        },
+        {
+          "kind": "sentence-split"
+        },
+        {
+          "kind": "openai.translate"
+        },
+        {
+          "kind": "translated-subtitle-output"
+        }
+      ],
+      "links": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ]
+      ]
+    }
+  ]
+}

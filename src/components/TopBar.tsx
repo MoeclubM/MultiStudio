@@ -1,35 +1,24 @@
-import { NavLink } from "react-router-dom";
-import { cn } from "@/lib/utils";
-
+import { useEffect, useState } from "react";
+import { Copy, Minus, Moon, Square, Sun, X } from "lucide-react";
+import { MultiStudioMark } from "./MultiStudioMark";
+import { Button } from "@/components/ui/button";
+import { invoke, listen } from "@/lib/desktop";
 export function TopBar() {
-  const link = (to: string, label: string) => (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        cn(
-          "rounded-full px-3.5 py-1.5 text-sm font-medium transition",
-          isActive ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:bg-accent hover:text-foreground",
-        )
-      }
-    >
-      {label}
-    </NavLink>
-  );
-
-  return (
-    <header className="sticky top-0 z-20 flex items-center justify-between border-b bg-background/80 px-4 py-3 backdrop-blur">
-      <div className="flex items-center gap-3">
-        <img src="/favicon.svg" alt="LiveTranslator" className="h-8 w-8 rounded-lg shadow-sm" width={32} height={32} />
-        <div>
-          <div className="text-sm font-semibold leading-none">LiveTranslator</div>
-          <div className="text-xs text-muted-foreground">实时语音 · OpenAI 兼容</div>
-        </div>
-      </div>
-      <nav className="flex items-center gap-1 rounded-full bg-muted p-1">
-        {link("/", "实时")}
-        {link("/settings", "设置")}
-        {link("/history", "历史")}
-      </nav>
-    </header>
-  );
+  const [theme, setTheme] = useState(() => localStorage.getItem("lt_theme") === "dark" ? "dark" : "light");
+  const [maximized, setMaximized] = useState(false);
+  useEffect(() => { document.documentElement.dataset.theme = theme; }, [theme]);
+  useEffect(() => {
+    let disposed = false, unlisten: (() => void) | undefined;
+    void invoke<{ maximized: boolean }>("window_state").then(state => { if (!disposed) setMaximized(state.maximized); });
+    void listen<{ maximized: boolean }>("window-state", ({ payload }) => setMaximized(payload.maximized)).then(fn => { if (disposed) fn(); else unlisten = fn; });
+    return () => { disposed = true; unlisten?.(); };
+  }, []);
+  function toggleTheme() { const next = theme === "light" ? "dark" : "light"; localStorage.setItem("lt_theme", next); setTheme(next); }
+  return <header className="app-header" data-window-drag onDoubleClick={() => void invoke("window_toggle_maximize")}>
+    <div className="app-wordmark"><span className="mobile-brand-icon"><MultiStudioMark size={23} /></span><span>MultiStudio</span></div>
+    <div className="app-header-actions" onDoubleClick={event => event.stopPropagation()}>
+      <Button variant="ghost" size="icon" className="header-icon-button" onClick={toggleTheme} aria-label={theme === "dark" ? "切换浅色主题" : "切换深色主题"}>{theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}</Button>
+      <div className="window-controls"><button aria-label="最小化" onClick={() => void invoke("window_minimize")}><Minus size={15} /></button><button aria-label={maximized ? "还原窗口" : "最大化"} onClick={() => void invoke("window_toggle_maximize")}>{maximized ? <Copy size={13} /> : <Square size={13} />}</button><button aria-label="关闭窗口" className="window-close" onClick={() => void invoke("window_close")}><X size={17} /></button></div>
+    </div>
+  </header>;
 }

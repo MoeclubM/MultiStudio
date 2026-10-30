@@ -1,0 +1,159 @@
+{
+  "apiVersion": 1,
+  "id": "multistudio.sherpa",
+  "name": "Sherpa ONNX",
+  "version": "1.0.0",
+  "entry": "index.cjs",
+  "backends": {
+    "sherpa": {
+      "name": "Sherpa ONNX",
+      "capabilities": [
+        "asr",
+        "tts"
+      ],
+      "modelImports": [
+        {
+          "engine": "senseVoice",
+          "name": "SenseVoice",
+          "task": "asr",
+          "format": "directory"
+        },
+        {
+          "engine": "paraformer",
+          "name": "Paraformer",
+          "task": "asr",
+          "format": "directory"
+        },
+        {
+          "engine": "kokoro",
+          "name": "Kokoro",
+          "task": "tts",
+          "format": "directory"
+        },
+        {
+          "engine": "vits",
+          "name": "VITS",
+          "task": "tts",
+          "format": "directory"
+        }
+      ]
+    }
+  },
+  "nodes": {
+    "sherpa.asr": {
+      "label": "ONNX 识别",
+      "group": "model",
+      "input": "audio",
+      "output": "text",
+      "icon": "mic",
+      "defaults": {
+        "modelId": "",
+        "language": "",
+        "threads": 4
+      },
+      "fields": [
+        {
+          "key": "modelId",
+          "label": "模型",
+          "type": "model",
+          "resource": "asr",
+          "backend": "sherpa"
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1
+        },
+        {
+          "key": "language",
+          "label": "语言",
+          "type": "text",
+          "placeholder": "自动检测"
+        }
+      ],
+      "backend": "sherpa"
+    },
+    "sherpa.tts": {
+      "label": "ONNX 合成",
+      "group": "model",
+      "input": "text",
+      "output": "audio",
+      "icon": "volume",
+      "defaults": {
+        "modelId": "",
+        "speakerId": 49,
+        "threads": 4,
+        "speed": 1
+      },
+      "fields": [
+        {
+          "key": "modelId",
+          "label": "模型",
+          "type": "model",
+          "resource": "tts",
+          "backend": "sherpa"
+        },
+        {
+          "key": "speakerId",
+          "label": "音色编号",
+          "type": "number",
+          "min": 0,
+          "max": 1000,
+          "step": 1
+        },
+        {
+          "key": "threads",
+          "label": "处理线程",
+          "type": "number",
+          "min": 1,
+          "max": 64,
+          "step": 1
+        },
+        {
+          "key": "speed",
+          "label": "语速",
+          "type": "number",
+          "min": 0.25,
+          "max": 4,
+          "step": 0.05
+        }
+      ],
+      "backend": "sherpa"
+    }
+  },
+  "templates": [
+    {
+      "id": "sherpa.transcribe",
+      "label": "音频转写",
+      "nodes": [
+        {
+          "kind": "audio-input"
+        },
+        {
+          "kind": "sherpa.asr"
+        },
+        {
+          "kind": "text-output"
+        }
+      ]
+    },
+    {
+      "id": "sherpa.speak",
+      "label": "文本朗读",
+      "nodes": [
+        {
+          "kind": "text-input"
+        },
+        {
+          "kind": "sherpa.tts"
+        },
+        {
+          "kind": "audio-output"
+        }
+      ]
+    }
+  ]
+}
